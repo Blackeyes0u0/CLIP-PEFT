@@ -1,2 +1,4 @@
 Data/
 DB/
+MLops/**/*.onnx
+.DS_Store
