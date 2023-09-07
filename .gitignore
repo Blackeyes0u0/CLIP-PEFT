@@ -2,3 +2,4 @@ Data/
 DB/
 MLops/**/*.onnx
 .DS_Store
+VAE/MNIST_data
