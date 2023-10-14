@@ -1,6 +1,80 @@
 # VectorUniverse
 #CLIP #VQA #Embeddings
 
+
+---
+## 1. Datasets
+
+#### youtube thumbnails data
+
+$I^{(i)}$ : youtube thumbnail Image data $i$
+$T^{(i)}$ : youtube Title data $i$
+$Y^{(i)}$ : youtube Label data $i$
+
+#### Example 
+
+$I^{(i)}$ :   ![](https://i.ytimg.com/vi/jNQXAC9IVRw/mqdefault.jpg)
+
+$T^{(i)}$ : **Me at the zoo**
+
+$Y^{(i)}$ : **Blog, daily**
+
+---
+## 2. Model Architecture
+
+<!-- ![Alt text](README_image/image.png) -->
+![Alt text](README_image/image-1.png)
+
+---
+## **3. Objective Funciton**
+
+
+#### MLE
+
+$\sum_{i=1}^{N} -P(Y^{(i)}) \log P(X^{(i)}|\theta)$
+
+<br>
+
+#### Preprocess & Tokenize
+$I_{}^{\prime(i)} = Preprocesser(I^{(i)})$ : CLIP  Preprocess (parameter freeze $\Phi_0$)
+
+$T_{}^{\prime(i)} = Tokenizer(T^{(i)})$ : CLIP Tokenizer (parameter freeze $\Phi_0$)
+
+$Y_{}^{\prime(i)} = Tokenizer(Y^{(i)})$ : CLIP Tokenizer (parameter freeze $\Phi_0$)
+
+
+<br>
+
+#### Embeddings 
+$E_I(I_{}^{\prime(i)};\theta_I)$ : CLIP Image Encoder + LoRA  (learnable params : $\theta_I$)
+$E_T(T_{}^{\prime(i)};\theta_T)$ : CLIP Text Encoder + LoRA (learnable params : $\theta_T$)
+
+$E_T(Y_{}^{\prime(i)};\theta_T)$ : CLIP Text Encoder + LoRA (learnable params : $\theta_T$)
+
+#### Concat Image embeddings and Text embeddings
+
+$X^{(i)} = f^{}(E_I(I_{}^{\prime(i)}),E_T(T_{}^{\prime(i)});\Psi)$
+
+$f(\cdot)$ : Image + Text concat models (learnable params : $\Psi$)
+
+<br>
+
+#### Kernel method 
+
+$\psi(X^{(i)})^T \cdot \phi(E_T(Y_{}^{\prime(i)}))$
+
+<br>
+
+### Objective function
+
+miminize KL-divergence
+
+
+
+
+
+---
+
 ## Installation
 
 🤗 Transformers is tested on Python 3.6+, PyTorch 1.1.0+, TensorFlow 2.0+, and Flax. Follow the installation instructions below for the deep learning library you are using:

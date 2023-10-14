@@ -1,5 +1,5 @@
 Data/
 DB/
-MLops/**/*.onnx
+toy_project/MLops/**/*.onnx
 .DS_Store
-VAE/MNIST_data
+toy_project/VAE/MNIST_data
