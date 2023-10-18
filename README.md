@@ -1,6 +1,17 @@
-# VectorUniverse
-#CLIP #VQA #Embeddings
+# <center> Vector Universe </center>
+---
 
+<center>
+
+![GitHub 로고](README_image/0u0.png)
+
+</center>
+
+#### <center> JoongHyun Shin </center>
+
+<br>
+
+##### <right>#CLIP #LoRA #Embeddings #Youtube Multimodal </right>
 
 ---
 ## 1. Datasets
@@ -13,7 +24,7 @@ $Y^{(i)}$ : youtube Label data $i$
 
 #### Example 
 
-$I^{(i)}$ :   ![](https://i.ytimg.com/vi/jNQXAC9IVRw/mqdefault.jpg)
+$I^{(i)}$ : ![Alt text](README_image/image.png)
 
 $T^{(i)}$ : **Me at the zoo**
 
