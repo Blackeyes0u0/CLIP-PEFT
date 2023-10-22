@@ -16,6 +16,8 @@
 ---
 ## 1. Datasets
 
+![Alt text](image-2.png)
+
 #### youtube thumbnails data
 
 $I^{(i)}$ : youtube thumbnail Image data $i$
@@ -24,18 +26,18 @@ $Y^{(i)}$ : youtube Label data $i$
 
 #### Example 
 
-$I^{(i)}$ : ![Alt text](README_image/image.png)
+$I^{(i)}$ : ![Alt text](image-1.png)
 
-$T^{(i)}$ : **Me at the zoo**
+$T^{(i)}$ : **Cutest Cats Compilation 2017 | Best Cute Cat Videos Ever**
 
-$Y^{(i)}$ : **Blog, daily**
+$Y^{(i)}$ : **Animal, Cat, Blog, daily**
 
 ---
 ## 2. Model Architecture
 
 <!-- ![Alt text](README_image/image.png) -->
-![Alt text](README_image/image-1.png)
-
+<!-- ![Alt text](README_image/image-1.png) -->
+![Alt text](image.png)
 ---
 ## **3. Objective Funciton**
 

@@ -94,3 +94,4 @@ if __name__=='__main__':
     
     for i in train_loader:
         print(i)
+        break

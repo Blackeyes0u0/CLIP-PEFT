@@ -3,3 +3,6 @@ DB/
 toy_project/MLops/**/*.onnx
 .DS_Store
 toy_project/VAE/MNIST_data
+toy_project/VAE/data
+project_code/tutorial/hymenoptera_data/
+project_code/tutorial/*.pt
