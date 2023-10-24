@@ -6,3 +6,5 @@ toy_project/VAE/MNIST_data
 toy_project/VAE/data
 project_code/tutorial/hymenoptera_data/
 project_code/tutorial/*.pt
+
+toy_project/VAE_GAN/MNIST_data/
