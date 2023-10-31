@@ -8,3 +8,8 @@ project_code/tutorial/hymenoptera_data/
 project_code/tutorial/*.pt
 
 toy_project/VAE_GAN/MNIST_data/
+
+Competition/MachineUnlearning/data
+Competition/MachineUnlearning/*.pth
+
+Competition/Careers_analysis/open/*.csv
