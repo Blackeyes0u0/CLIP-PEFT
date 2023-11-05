@@ -72,6 +72,7 @@ https://github.com/Blackeyes0u0/Blackeyes0u0-paper-review/blob/master/papers/Lan
 ![Alt text](image-3.png)
 
 ---
+
 ### Anisotropy Loss
 ![Alt text](image-4.png)
 
