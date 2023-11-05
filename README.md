@@ -14,7 +14,7 @@
 ##### <right>#CLIP #LoRA #Embeddings #Youtube Multimodal </right>
 
 ---
-## 1. Datasets
+# 1. Datasets
 
 ![Alt text](image-2.png)
 
@@ -33,12 +33,49 @@ $T^{(i)}$ : **Cutest Cats Compilation 2017 | Best Cute Cat Videos Ever**
 $Y^{(i)}$ : **Animal, Cat, Blog, daily**
 
 ---
-## 2. Model Architecture
+# 2. Model & Loss Architecture
 
-<!-- ![Alt text](README_image/image.png) -->
-<!-- ![Alt text](README_image/image-1.png) -->
-![Alt text](image.png)
+>####Model Architecture
+### LoRA
+
+![Alt text](image-5.png)
+
+reference
+https://velog.io/@blackeyes0u0/%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0-LoRA-Low-Rank-Adaptation-of-Large-Language-Models
+
 ---
+
+>####Loss Architecture
+
+# 3. Objective function
+
+<!-- N = batch_size -->
+<!-- sim  = cosine, mutual information, euclidean distance -->
+
+$$
+\mathcal{L} = \sum_{i=1}^{N} log \exp^ {-\frac{1}{\tau}  sim(h_i,h_i^+)} (Alignment)
+$$
+
+$$
++\sum_{i=1}^{N} log \sum_{j \neq i}^{N} \exp^{\frac{1}{\tau} sim(h_i,h_j)} (Anisotropy)
+$$
+
+
+reference :
+https://github.com/Blackeyes0u0/Blackeyes0u0-paper-review/blob/master/papers/Language/simCSE/simcse.md
+
+
+### Alignment Loss
+
+
+
+![Alt text](image-3.png)
+
+---
+
+### Anisotropy Loss
+![Alt text](image-4.png)
+
 ## **3. Objective Funciton**
 
 
@@ -46,6 +83,8 @@ $Y^{(i)}$ : **Animal, Cat, Blog, daily**
 
 $\sum_{i=1}^{N} -P(Y^{(i)}) \log P(X^{(i)}|\theta)$
 
+
+<!-- 
 <br>
 
 #### Preprocess & Tokenize
@@ -77,10 +116,10 @@ $f(\cdot)$ : Image + Text concat models (learnable params : $\Psi$)
 $\psi(X^{(i)})^T \cdot \phi(E_T(Y_{}^{\prime(i)}))$
 
 <br>
-
-### Objective function
-
 miminize KL-divergence
+-->
+
+
 
 
 
@@ -88,7 +127,9 @@ miminize KL-divergence
 
 ---
 
-## Installation
+### Installation 
+
+#### transformers & peft & loralib
 
 🤗 Transformers is tested on Python 3.6+, PyTorch 1.1.0+, TensorFlow 2.0+, and Flax. Follow the installation instructions below for the deep learning library you are using:
 
