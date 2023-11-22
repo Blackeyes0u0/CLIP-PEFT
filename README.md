@@ -38,6 +38,8 @@ $Y^{(i)}$ : **Animal, Cat, Blog, daily**
 >####Model Architecture
 ### LoRA
 
+![](https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/peft/lora_diagram.png)
+
 ![Alt text](image-5.png)
 
 reference

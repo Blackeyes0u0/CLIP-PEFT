@@ -15,3 +15,5 @@ Competition/MachineUnlearning/*.pth
 Competition/Careers_analysis/open/*.csv
 
 project_code/youtube/**/data
+
+project_code/youtube/coding_test
