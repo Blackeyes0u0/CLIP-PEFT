@@ -68,15 +68,12 @@ https://github.com/Blackeyes0u0/Blackeyes0u0-paper-review/blob/master/papers/Lan
 
 
 ### Alignment Loss
-
-
-
-![Alt text](image-3.png)
-
----
-
 ### Anisotropy Loss
-![Alt text](image-4.png)
+
+
+<!-- ![Alt text](image-3.png) -->
+![Alt text](image-7.png)
+<!-- ![Alt text](image-6.png) -->
 
 ## **3. Objective Funciton**
 
