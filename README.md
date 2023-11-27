@@ -22,7 +22,6 @@
 
 $I^{(i)}$ : youtube thumbnail Image data $i$
 $T^{(i)}$ : youtube Title data $i$
-$Y^{(i)}$ : youtube Label data $i$
 
 #### Example 
 
@@ -30,24 +29,24 @@ $I^{(i)}$ : ![Alt text](image-1.png)
 
 $T^{(i)}$ : **Cutest Cats Compilation 2017 | Best Cute Cat Videos Ever**
 
-$Y^{(i)}$ : **Animal, Cat, Blog, daily**
 
 ---
 # 2. Model & Loss Architecture
 
->####Model Architecture
-### LoRA
+<!-- 
+![](https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/peft/lora_diagram.png) -->
 
-![](https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/peft/lora_diagram.png)
+<!-- ![Alt text](image-5.png) -->
+![Alt text](image-7.png)
 
-![Alt text](image-5.png)
+- LoRA 설명
+#### https://velog.io/@blackeyes0u0/%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0-LoRA-Low-Rank-Adaptation-of-Large-Language-Models
 
-reference
-https://velog.io/@blackeyes0u0/%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0-LoRA-Low-Rank-Adaptation-of-Large-Language-Models
+- model 설명
+### https://velog.io/@blackeyes0u0/youtube-CLIP-LoRA-SimCSE-%EA%B2%B0%EA%B3%BC
 
 ---
 
->####Loss Architecture
 
 # 3. Objective function
 
@@ -69,22 +68,21 @@ https://github.com/Blackeyes0u0/Blackeyes0u0-paper-review/blob/master/papers/Lan
 
 
 <!-- ![Alt text](image-3.png) -->
-![Alt text](image-7.png)
+
 <!-- ![Alt text](image-6.png) -->
-
-
-# Objective function
-
 
 $$
 \mathcal{L} = \sum_{i=1}^{N} log \exp^ {-\frac{1}{\tau}  sim(h_i,h_i^+)} (Alignment)
 $$
+
 $$
-+ \sum_{i=1}^{N} log \sum_{j \neq i}^{N} \exp^{\frac{1}{\tau} sim(h_i,h_j)} (Anisotropy)
++\sum_{i=1}^{N} log \sum_{j \neq i}^{N} \exp^{\frac{1}{\tau} sim(h_i,h_j)} (Anisotropy)
 $$
+
 $$
 h_i = f(x_i), N = batchsize
 $$
+
 여기서 나오는 sim은 similarity의 약자이고, cosine similarity를 사용하였다.
 
 내가 base model로 사용한 CLIP은 image와 text간의 alignment와 anisotropy가 잘 되어있다고 가정을 하였지만, 전체 식으로 전부 확장하는것이 맞는것같아서 진행해보자.
@@ -92,7 +90,7 @@ $$
 ### Notation
 i번째 image embedding : $I_i$ 는 row vector라고 가정하자.
 i번째 text embedding : $T_i$
-**(단, $I_i,T_j,I_i^+,T_j^+$는 1로 normalize되어 있다.) **
+**(단, $I_i,T_j,I_i^+,T_j^+$는 1로 normalize되어 있다.)**
 코드를 짤때는, cosine similarity를 사용해서 normalize시켰다.
 
 $$
