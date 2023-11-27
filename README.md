@@ -124,17 +124,22 @@ $$
 =\mu \mu^T + \frac{1}{N^2}\sum_{i \in \chi }^N \sum_{j \in \chi}^N \sigma_i \cdot \sigma_j^T \\
 =  I \cdot I^T = A
 $$
+
 가 되어서 뜻을 해석해보면 임베딩의 평균값을 낮추고, 분산의 곱을 낮추는 식이다. 또한, 위 식은 symmetric matrix이기 때문에 항상 diagonalizable하고, 그 eigen vector는 orthogonal 합니다.
 
 그러한 경우를 eigen decompositoin해서 생각해보자.
 $A$라고 놓은 행렬을 $A P_i = \lambda_i P_i$라고 생각해보자. 이때 $P_i$는 $\lambda_i$에 대한 eigen vector입니다.
+
 $$ 
 A = P DP^T
 $$
+
 이때, $PP^T = E$ 즉, orthogonal하므로, 
+
 $$
 A = \sum_i \lambda_i P_i \cdot P_i^T
 $$
+
 $\lambda_i$의 어느 한값이 크다는 것은 데이터가 골고루 퍼져있기보단, 한 방향으로 치우쳐져있는것이다. 따라서 위 eigen value값을 골고루 만드느것이 여기서 나온 anisotropy의 목적입니다. 
 
 ### Flatten Embedding
