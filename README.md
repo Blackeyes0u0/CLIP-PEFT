@@ -39,6 +39,8 @@ $T^{(i)}$ : **Cutest Cats Compilation 2017 | Best Cute Cat Videos Ever**
 <!-- ![Alt text](image-5.png) -->
 ![Alt text](image-7.png)
 
+위 모델 아키텍쳐를 보면 Latent space 상에서 이미지 임베딩과 텍스트 임베딩의 거리를 가깝게 하는것을 alignment, 멀게하는것을 anisotropy라고 정의하였습니다.
+
 - LoRA 설명
 #### https://velog.io/@blackeyes0u0/%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0-LoRA-Low-Rank-Adaptation-of-Large-Language-Models
 
