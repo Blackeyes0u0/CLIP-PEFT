@@ -50,22 +50,6 @@ $T^{(i)}$ : **Cutest Cats Compilation 2017 | Best Cute Cat Videos Ever**
 
 # 3. Objective function
 
-<!-- N = batch_size -->
-<!-- sim  = cosine, mutual information, euclidean distance -->
-
-$$
-\mathcal{L} = \sum_{i=1}^{N} log \exp^ {-\frac{1}{\tau}  sim(h_i,h_i^+)} (Alignment)
-$$
-
-$$
-+\sum_{i=1}^{N} log \sum_{j \neq i}^{N} \exp^{\frac{1}{\tau} sim(h_i,h_j)} (Anisotropy)
-$$
-
-
-reference :
-https://github.com/Blackeyes0u0/Blackeyes0u0-paper-review/blob/master/papers/Language/simCSE/simcse.md
-
-
 
 <!-- ![Alt text](image-3.png) -->
 
@@ -83,37 +67,44 @@ $$
 h_i = f(x_i), N = batchsize
 $$
 
-여기서 나오는 sim은 similarity의 약자이고, cosine similarity를 사용하였다.
-
-내가 base model로 사용한 CLIP은 image와 text간의 alignment와 anisotropy가 잘 되어있다고 가정을 하였지만, 전체 식으로 전부 확장하는것이 맞는것같아서 진행해보자.
+여기서 나오는 sim은 similarity의 약자이고, cosine similarity를 사용하였습니다.
 
 ### Notation
-i번째 image embedding : $I_i$ 는 row vector라고 가정하자.
+
+i번째 image embedding : $I_i$ 는 row vector
+
 i번째 text embedding : $T_i$
-**(단, $I_i,T_j,I_i^+,T_j^+$는 1로 normalize되어 있다.)**
-코드를 짤때는, cosine similarity를 사용해서 normalize시켰다.
+
+**(단, $I_i,T_j,I_i^+,T_j^+$는 1로 normalize)**
+
+코드 상에서는 cosine similarity를 사용해서 normalize하였습니다.
 
 $$
 I_i = \mathbb M(batchsize,d=512)[i] \\
 I, I^+,T, T^+ 
 $$
+
+## Image Text Alignment & Anisotropy
+
 $$
-alignment = -[sim(I,I^+)+sim(I,T)+sim(I^+,T^+)+sim(T,T^+)] 
+alignment = -\sum_i tr(II^{+T}+I T^T+ I^+ T^{+T}+TT^{+T})
 $$
 
 
-먼저 위 Object function에서 anisotropy식이 아래와 같이 되기 위해서는 convex function라고 가정하고, jensen's inequality를 사용한 결과이다.
+먼저 위 Object function에서 anisotropy식이 아래와 같이 되기 위해서는 convex function라고 가정하고, jensen's inequality를 사용한 결과입니다.
+
 $$
 anisotropy = \sum_i \sum_{j \neq i} I_i \cdot T_j^T + \cdots \\
-= sum(I T^T) + sum(I^+ T^{+T})+sum(II^{+T}) + sum(TT^{+T}) +C
+= sum(II^{+T}+I T^T+ I^+ T^{+T}+TT^{+T}) +alignment
 $$
-(단, $I_i,T_j,I_i^+,T_j^+$는 1로 normalize되어 있다.) 그래야만 C로 치환해서 상수로 취급할 수 있다..
 
-다음과 행렬은 (batch_size*batch_size)크기의 행렬이다.
 
-위 식을 분산과 평균 관점에서 다시 바라보자.
-$I_i$가 한개의 임베딩 값이라고 하고, 이 값들은 각 평균과 분산을 갖는다고 해보자. 이럴때, 적절한 임베딩은 어느 한 차원으로 쏠리지 않고 적절하게 분산되어서 표현되는것이다.
-이것에 대한 자료는 PCA whitening과 batch normalization이 생각난다. 무엇을 사용해야할지는 먼저 수식을 전개해보자.
+$I I^T$는 (batch_size*batch_size)크기의 행렬입니다.
+
+위 식을 분산과 평균 관점에서 다시 바라보았습니다.
+$I_i$가 한개의 임베딩 값이라고 하고, 이 값들은 각 평균과 분산을 갖는다고 하면, 적절한 임베딩은 어느 한 차원으로 쏠리지 않고 적절하게 분산되어서 표현되는것 입니다.
+
+이것에 대한 솔루션으로는 PCA whitening과 batch normalization이가 생각이 납니다. 무엇을 사용해야할지는 알기 위해 수식을 전개해 보았습니다.
 
 $$
 I_i = \mu +\sigma_i \\
@@ -133,10 +124,10 @@ $$
 =\mu \mu^T + \frac{1}{N^2}\sum_{i \in \chi }^N \sum_{j \in \chi}^N \sigma_i \cdot \sigma_j^T \\
 =  I \cdot I^T = A
 $$
-가 되어서 뜻을 해석해보면 임베딩의 평균값을 낮추고, 분산의 곱을 낮추는 식이다. 또한, 위 식은 symmetric matrix이기 때문에 항상 diagonalizable하고, 그 eigen vector는 orthogonal 하다.
+가 되어서 뜻을 해석해보면 임베딩의 평균값을 낮추고, 분산의 곱을 낮추는 식이다. 또한, 위 식은 symmetric matrix이기 때문에 항상 diagonalizable하고, 그 eigen vector는 orthogonal 합니다.
 
 그러한 경우를 eigen decompositoin해서 생각해보자.
-$A$라고 놓은 행렬을 $A P_i = \lambda_i P_i$라고 생각해보자. 이때 $P_i$는 $\lambda_i$에 대한 eigen vector이다.
+$A$라고 놓은 행렬을 $A P_i = \lambda_i P_i$라고 생각해보자. 이때 $P_i$는 $\lambda_i$에 대한 eigen vector입니다.
 $$ 
 A = P DP^T
 $$
@@ -144,24 +135,27 @@ $$
 $$
 A = \sum_i \lambda_i P_i \cdot P_i^T
 $$
-$\lambda_i$의 어느 한값이 크다는 것은 데이터가 골고루 퍼져있기보단, 한 방향으로 치우쳐져있는것이다. 따라서 위 eigen value값을 골고루 만드느것이 anisotropy의 목적이다. 
+$\lambda_i$의 어느 한값이 크다는 것은 데이터가 골고루 퍼져있기보단, 한 방향으로 치우쳐져있는것이다. 따라서 위 eigen value값을 골고루 만드느것이 여기서 나온 anisotropy의 목적입니다. 
 
 ### Flatten Embedding
-위 목적을 이루기 위해서 어떻게 해야할까??
+
+위 목적을 이루기 위해서 어떻게 해야할까요??
 
 만약에 $I_i$가 normalize 되어있다고 한다면, $tr(A)$의 값은 sum of eigen value이고, constant할것이다. 왜냐하면 diagonal element가 모두 1이기 때문에.
-그렇다면 largest eigen value의 값을 줄이고, smallest한 eigen value의 값을 키우면 된다. 
+그렇다면 largest eigen value의 값을 줄이고, smallest한 eigen value의 값을 키우면 됩니다. 
 
-만약에 , A의 값들이 모두 양수이고, $sum(P_i \cdot P_i^T)$가 양수라면 sum($A$)를 largest eigen value의 upper bound와 비례한다고 놓을 수 있다. 그래서 위 sum을 줄이는것이, flatten embedding을 하면서 negative pair끼리의 임베딩을 할 수 있다고 본다. 
+만약에 , A의 값들이 모두 양수이고, $sum(P_i \cdot P_i^T)$가 양수라면 sum($A$)를 largest eigen value의 upper bound와 비례한다고 놓을 수 있다. 그래서 위 sum을 줄이는것이, flatten embedding을 하면서 negative pair끼리의 임베딩을 할 수 있습니다. 
 
-SimCSE 논문의 아이디어를 인용하였다.
+SimCSE 논문의 아이디어를 인용하였습니다.
 https://arxiv.org/abs/2104.08821
 ---
 ## Flatten different Embeddings
 
-하지만 나는 그렇게 조건을 줄 수 없기에, 다른 방식을 생각해야한다. 이유, 다른 임베딩끼리의 표현이기 때문에..
-그래서 위처럼 하나의 식으로 보지않고, 따로 볼 작정이다.
-이제 본격적으로, I와 T에 대해서 생각해보자.
+하지만 나는 그렇게 조건을 줄 수 없기에, 다른 방식을 생각해야 했습니다. 이유, 다른 임베딩끼리의 표현이기 때문에..
+
+그래서 위처럼 negative pair loss와 anisotropy를 하나의 식으로 보지않고, 따로 볼 생각입니다.
+이제 I와 T에 대해서 생각해 봅시다.
+
 ### negative pair loss
 
 $$
@@ -175,7 +169,7 @@ $$
 $$
 =\mu^{(Image)} \mu^{(Text)T} + \frac{1}{N^2}\sum_{i \in \chi}^N \sum_{j \neq i \in \Chi}^N \sigma_i \cdot \sigma_j^T
 $$
-직관적인 의미를 보자면, 이미지와 텍스트의 평균 값을 줄이고, 각 이미지와 텍스트 임베딩의 서로 다른 분산 임베딩을 줄이는 것이다. 먼저 이걸로, negative pair끼리의 dot product값을 줄여, cosine similarity를 줄일 수 있다. 
+직관적인 의미를 보자면, 이미지와 텍스트의 평균 값을 줄이고, 각 이미지와 텍스트 임베딩의 서로 다른 분산 임베딩을 줄이는 것입니다. 먼저 이걸로, negative pair끼리의 dot product값을 줄여, cosine similarity를 줄일 수 있습니다. 
 
 ## Objective function code
 ```python
