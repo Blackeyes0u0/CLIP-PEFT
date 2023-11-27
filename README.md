@@ -174,6 +174,7 @@ $$
 $$
 =\mu^{(Image)} \mu^{(Text)T} + \frac{1}{N^2}\sum_{i \in \chi}^N \sum_{j \neq i \in \Chi}^N \sigma_i \cdot \sigma_j^T
 $$
+
 직관적인 의미를 보자면, 이미지와 텍스트의 평균 값을 줄이고, 각 이미지와 텍스트 임베딩의 서로 다른 분산 임베딩을 줄이는 것입니다. 먼저 이걸로, negative pair끼리의 dot product값을 줄여, cosine similarity를 줄일 수 있습니다. 
 
 ## Objective function code
