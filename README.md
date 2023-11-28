@@ -56,15 +56,12 @@ $$
 h_i = f(x_i)
 $$
 
-$h_i$는 데이터의 임베딩에 해당하고, $z_i$는 각 데이터에 가한 augmentation에 해당한다.
+![Alt text](image-8.png)
 
-$$
-\begin{equation}
-\ell_i=-\log \frac{e^{\operatorname{sim}\left(\mathbf{h}_i^{z_i}, \mathbf{h}_i^{z_i^{\prime}}\right) / \tau}}{\sum_{j=1}^N e^{\operatorname{sim}\left(\mathbf{h}_i^{z_i}, \mathbf{h}_j^{z_j^{\prime}}\right) / \tau}}
-\end{equation}
-$$
+$i$ 번째 데이터와 $N$개의 batch_size pair 대해서 위와 같이 표현 할 수있다. 
 
-$i$ 번째 데이터와 $N$개의 batch_size pair 대해서 위와 같이 표현 할 수있다.
+$h_i$는 데이터의 임베딩에 해당하고, $z_i$는 각 데이터에 가한 augmentation에 해당한다. $\tau$는 하이퍼파라미터 temperature값이다.
+
 
 <!-- ![Alt text](image-3.png) -->
 
