@@ -116,10 +116,12 @@ alignment = -\sum_i tr(II^{+T}+I T^T+ I^+ T^{+T}+TT^{+T})
 $$
 
 
-먼저 위 Object function에서 Uniform식이 아래와 같이 되기 위해서는 convex function라고 가정하고, jensen's inequality를 사용한 결과입니다.
+먼저 위 Object function에서 Uniform식이 아래와 같이 되기 위해서는 convex function라고 가정하고, jensen's inequality를 사용한 결과입니다. 
+
+땨라서 $F(E[x]) \leq E[f(x)]$가 됩니다.
 
 $$
-Uniform = \sum_i \sum_{j } I_i \cdot T_j^T + \cdots \\
+Uniform \leq \sum_i \sum_{j } \log \exp ( I_i \cdot T_j^T + \cdots )\\
 = sum(II^{+T}+I T^T+ I^+ T^{+T}+TT^{+T})
 $$
 
