@@ -70,7 +70,7 @@ $$
 
 
 $$ 
-\mathcal{L_i} = - \log \frac{e^{sim(h_i,h_i^+) / \tau}}{\sum_{j=1}^N e^{sim(h_i,h_j)/ \tau}}
+\mathcal{L_i} = - \log \frac{e^{sim(h_i,h_i^+) / \tau}}{\sum_je^{sim(h_i,h_j)/ \tau}}
 $$
 
 
