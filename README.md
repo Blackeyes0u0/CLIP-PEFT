@@ -125,7 +125,7 @@ Uniform \leq \sum_i \sum_{j } \log \exp ( I_i \cdot T_j^T + \cdots )\\
 = sum(II^{+T}+I T^T+ I^+ T^{+T}+TT^{+T})
 $$
 
-
+오른쪽 term이 uniform의 upper bound가 됩니다.
 
 위 식을 분산과 평균 관점에서 다시 바라보았습니다.
 $I_i$가 한개의 임베딩 값이라고 하고, 이 값들은 각 평균과 분산을 갖는다고 하면, 적절한 임베딩은 어느 한 차원으로 쏠리지 않고 적절하게 분산되어서 표현되는것 입니다.
