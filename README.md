@@ -69,7 +69,7 @@ h_i = f(x_i)
 $$
 
 $$
-\ell_i=-\log \frac{e^{\operatorname{sim}\mathbf{h}_i^{z_i}, \mathbf{h}_i^{z_i^{\prime}} / \tau}}{\sum_{j=1}^N e^{\operatorname{sim}\mathbf{h}_i^{z_i}, \mathbf{h}_j^{z_j^{\prime}} / \tau}}
+\mathcal{L}_i=-\log \frac{e^{\operatorname{sim}\mathbf{h}_i^{z_i}, \mathbf{h}_i^{z_i^{\prime}} / \tau}}{\sum_{j=1}^N e^{\operatorname{sim}\mathbf{h}_i^{z_i}, \mathbf{h}_j^{z_j^{\prime}} / \tau}}
 $$
 
 $i$ 번째 데이터와 $N$개의 batch_size pair 대해서 위와 같이 표현 할 수있다. 
