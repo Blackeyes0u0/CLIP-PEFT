@@ -68,9 +68,12 @@ $$
 h_i = f(x_i)
 $$
 
+
+$$ 
+\mathcal{L_i} = - \log \frac{e^{sim(h_i,h_i^+) / \tau}}{\sum_{j=1}^N e^{sim(h_i,h_j)/ \tau}}
 $$
-\mathcal{L}_i=-\log \frac{e^{sim( {h}_i^{z_i}, {h}_i^{z_i^{\prime}}) / \tau }}{\sum_{j=1}^N e^{sim({h}_i^{z_i}, {h}_j^{z_j^{\prime}}) / \tau}}
-$$
+
+
 
 $i$ 번째 데이터와 $N$개의 batch_size pair 대해서 위와 같이 표현 할 수있다. 
 
