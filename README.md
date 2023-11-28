@@ -135,9 +135,11 @@ I_i = \mu +\sigma_i \\
 \mu = \frac{1}{N}\sum_{i \in \chi}^N I_i\\
 \therefore \frac{1}{N}\sum_{i \in \chi}^N \sigma_i = 0
 $$
+
 $I$만 생각해보면,
+
 $$
-\frac{1}{N^2}\sum_{i \in \chi}^N \sum_{j \in \chi}^N I_i \cdot I_j^T 
+sum(I  I^T) = \frac{1}{N^2}\sum_{i \in \chi}^N \sum_{j \in \chi}^N I_i \cdot I_j^T 
 $$
 
 $$
@@ -145,14 +147,13 @@ $$
 $$
 
 $$
-=\mu \mu^T + \frac{1}{N^2}\sum_{i \in \chi }^N \sum_{j \in \chi}^N \sigma_i \cdot \sigma_j^T \\
-=  I \cdot I^T = A
+=\mu \mu^T + \frac{1}{N^2}\sum_{i \in \chi }^N \sum_{j \in \chi}^N \sigma_i \cdot \sigma_j^T
 $$
 
 가 되어서 뜻을 해석해보면 임베딩의 평균값을 낮추고, 분산의 곱을 낮추는 식이다. 또한, 위 식은 symmetric matrix이기 때문에 항상 diagonalizable하고, 그 eigen vector는 orthogonal 합니다.
 
 그러한 경우를 eigen decompositoin해서 생각해보자.
-$A$라고 놓은 행렬을 $A P_i = \lambda_i P_i$라고 생각해보자. 이때 $P_i$는 $\lambda_i$에 대한 eigen vector입니다.
+$A=I \cdot I^T$라고 할때, $A$를 $A P_i = \lambda_i P_i$라고 생각해보자. 이때 $P_i$는 $\lambda_i$에 대한 eigen vector입니다.
 
 $$ 
 A = P DP^T
