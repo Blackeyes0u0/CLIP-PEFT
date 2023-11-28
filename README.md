@@ -39,7 +39,7 @@ $T^{(i)}$ : **Cutest Cats Compilation 2017 | Best Cute Cat Videos Ever**
 <!-- ![Alt text](image-5.png) -->
 ![Alt text](image-7.png)
 
-위 모델 아키텍쳐를 보면 Latent space 상에서 이미지 임베딩과 텍스트 임베딩의 거리를 가깝게 하는것을 alignment, 멀게하는것을 anisotropy라고 정의하였습니다.
+위 모델 아키텍쳐를 보면 Latent space 상에서 이미지 임베딩과 텍스트 임베딩의 거리를 가깝게 하는것을 alignment, 멀게하는것을 Uniform라고 정의하였습니다.
 
 - LoRA 설명
 #### https://velog.io/@blackeyes0u0/%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0-LoRA-Low-Rank-Adaptation-of-Large-Language-Models
@@ -52,7 +52,16 @@ $T^{(i)}$ : **Cutest Cats Compilation 2017 | Best Cute Cat Videos Ever**
 
 # 3. Objective function
 
+$$
+h_i = f(x_i)
+$$
 
+$h_i$는 데이터의 임베딩에 해당하고, $z_i$는 각 데이터에 가한 augmentation에 해당한다.
+
+$$
+\ell_i=-\log \frac{e^{\operatorname{sim}\left(\mathbf{h}_i^{z_i}, \mathbf{h}_i^{z_i^{\prime}}\right) / \tau}}{\sum_{j=1}^N e^{\operatorname{sim}\left(\mathbf{h}_i^{z_i}, \mathbf{h}_j^{z_j^{\prime}}\right) / \tau}}
+$$
+$i$ 번째 데이터와 $N$개의 batch_size pair 대해서 위와 같이 표현 할 수있다.
 <!-- ![Alt text](image-3.png) -->
 
 <!-- ![Alt text](image-6.png) -->
@@ -62,12 +71,9 @@ $$
 $$
 
 $$
-+\sum_{i=1}^{N} log \sum_{j \neq i}^{N} \exp^{\frac{1}{\tau} sim(h_i,h_j)} (Anisotropy)
++\sum_{i=1}^{N} log \sum_{j=1 }^{N} \exp^{\frac{1}{\tau} sim(h_i,h_j)} (Uniform)
 $$
 
-$$
-h_i = f(x_i), N = batchsize
-$$
 
 여기서 나오는 sim은 similarity의 약자이고, cosine similarity를 사용하였습니다.
 
@@ -82,26 +88,24 @@ i번째 text embedding : $T_i$
 코드 상에서는 cosine similarity를 사용해서 normalize하였습니다.
 
 $$
-I_i = \mathbb M(batchsize,d=512)[i] \\
-I, I^+,T, T^+ 
+I_i = \mathbb M(batchsize,d=512)[i]
 $$
 
-## Image Text Alignment & Anisotropy
+## Image Text Alignment & Uniform
 
 $$
 alignment = -\sum_i tr(II^{+T}+I T^T+ I^+ T^{+T}+TT^{+T})
 $$
 
 
-먼저 위 Object function에서 anisotropy식이 아래와 같이 되기 위해서는 convex function라고 가정하고, jensen's inequality를 사용한 결과입니다.
+먼저 위 Object function에서 Uniform식이 아래와 같이 되기 위해서는 convex function라고 가정하고, jensen's inequality를 사용한 결과입니다.
 
 $$
-anisotropy = \sum_i \sum_{j \neq i} I_i \cdot T_j^T + \cdots \\
-= sum(II^{+T}+I T^T+ I^+ T^{+T}+TT^{+T}) +alignment
+Uniform = \sum_i \sum_{j } I_i \cdot T_j^T + \cdots \\
+= sum(II^{+T}+I T^T+ I^+ T^{+T}+TT^{+T})
 $$
 
 
-$I I^T$는 (batch_size*batch_size)크기의 행렬입니다.
 
 위 식을 분산과 평균 관점에서 다시 바라보았습니다.
 $I_i$가 한개의 임베딩 값이라고 하고, 이 값들은 각 평균과 분산을 갖는다고 하면, 적절한 임베딩은 어느 한 차원으로 쏠리지 않고 적절하게 분산되어서 표현되는것 입니다.
@@ -142,7 +146,7 @@ $$
 A = \sum_i \lambda_i P_i \cdot P_i^T
 $$
 
-$\lambda_i$의 어느 한값이 크다는 것은 데이터가 골고루 퍼져있기보단, 한 방향으로 치우쳐져있는것이다. 따라서 위 eigen value값을 골고루 만드느것이 여기서 나온 anisotropy의 목적입니다. 
+$\lambda_i$의 어느 한값이 크다는 것은 데이터가 골고루 퍼져있기보단, 한 방향으로 치우쳐져있는것이다. 따라서 위 eigen value값을 골고루 만드느것이 여기서 나온 Uniform의 목적입니다. 
 
 ### Flatten Embedding
 
@@ -162,21 +166,21 @@ https://arxiv.org/abs/2104.08821
 
 하지만 나는 그렇게 조건을 줄 수 없기에, 다른 방식을 생각해야 했습니다. 이유, 다른 임베딩끼리의 표현이기 때문에..
 
-그래서 위처럼 negative pair loss와 anisotropy를 하나의 식으로 보지않고, 따로 볼 생각입니다.
+그래서 위처럼 negative pair loss와 Uniform를 하나의 식으로 보지않고, 따로 볼 생각입니다.
 이제 I와 T에 대해서 생각해 봅시다.
 
 ### negative pair loss
 
 $$
-\frac{1}{N^2}\sum_{i \in \chi }^N \sum_{j \neq i \in \Chi}^N I_i \cdot T_j^T 
+\frac{1}{N^2}\sum_{i \in \chi }^N \sum_{j  \in \Chi}^N I_i \cdot T_j^T 
 $$
 
 $$
-= \frac{1}{N^2}\sum_{i \in \chi}^N \sum_{j \neq i \in \Chi}^N (\mu^{(Image)} +\sigma_i^{(Image)} ) \cdot (\mu^{(Text)} +\sigma_j^{(Text)} )^T
+= \frac{1}{N^2}\sum_{i \in \chi}^N \sum_{j  \in \Chi}^N (\mu^{(Image)} +\sigma_i^{(Image)} ) \cdot (\mu^{(Text)} +\sigma_j^{(Text)} )^T
 $$
 
 $$
-=\mu^{(Image)} \mu^{(Text)T} + \frac{1}{N^2}\sum_{i \in \chi}^N \sum_{j \neq i \in \Chi}^N \sigma_i \cdot \sigma_j^T
+=\mu^{(Image)} \mu^{(Text)T} + \frac{1}{N^2}\sum_{i \in \chi}^N \sum_{j  \in \Chi}^N \sigma_i \cdot \sigma_j^T
 $$
 
 직관적인 의미를 보자면, 이미지와 텍스트의 평균 값을 줄이고, 각 이미지와 텍스트 임베딩의 서로 다른 분산 임베딩을 줄이는 것입니다. 먼저 이걸로, negative pair끼리의 dot product값을 줄여, cosine similarity를 줄일 수 있습니다. 
@@ -197,7 +201,7 @@ class Loss(ABC):
         raise NotImplementedError
     
     @abstractmethod
-    def Anisotropy(self) -> None:
+    def Uniform(self) -> None:
         """Define layers in ther model."""
         raise NotImplementedError
     def Total_loss(self) -> None:
@@ -226,32 +230,32 @@ class SimLoss(Loss): # what i want to similar
         Altt = -(self.tau*F.cosine_similarity(self.ht1,self.ht2))
         return (ALii+ALtt+Alit1+Alit2)#/self.batch_size
     
-    def Anisotropy(self):
-        anisotropy = torch.empty(batch_size)
+    def Uniform(self):
+        Uniform = torch.empty(batch_size)
         for i in range(batch_size):
             Ii1 = self.hi1[i]
             Ii2 = self.hi2[i]
             Ti1 = self.ht1[i]
             Ti2 = self.ht2[i] 
-            anisotropyj = 0
+            Uniformj = 0
             for j in range(batch_size):
                 if i!=j:
                     Ij1 = self.hi1[j]
                     Ij2 = self.hi2[j]
                     Tj1 = self.ht1[j]
                     Tj2 = self.ht2[j] 
-                    anisotropyj+=F.cosine_similarity(Ii1,Ij1,dim=0)
-                    anisotropyj+=F.cosine_similarity(Ti2,Tj2,dim=0)
-                    anisotropyj+=F.cosine_similarity(Ii1,Tj1,dim=0)
-                    anisotropyj+=F.cosine_similarity(Ii2,Tj2,dim=0)
+                    Uniformj+=F.cosine_similarity(Ii1,Ij1,dim=0)
+                    Uniformj+=F.cosine_similarity(Ti2,Tj2,dim=0)
+                    Uniformj+=F.cosine_similarity(Ii1,Tj1,dim=0)
+                    Uniformj+=F.cosine_similarity(Ii2,Tj2,dim=0)
                     # tau 값을 넣으면 너무 커져서 안됨 .. batch size에 따라서 조절해야할듯..        
-            anisotropy[i] = anisotropyj/self.batch_size#*tau
-        return anisotropy
+            Uniform[i] = Uniformj/self.batch_size#*tau
+        return Uniform
     
     def Total_loss(self,device):
         alignment  = self.Alignment().to(device)
-        anisotropy = self.Anisotropy().to(device)
-        return torch.sum(alignment+anisotropy)/batch_size
+        Uniform = self.Uniform().to(device)
+        return torch.sum(alignment+Uniform)/batch_size
 ```
 
 # Train
@@ -283,15 +287,15 @@ def train(lora_model,device,train_dataloader,train_dataloader2):
                              hi2=image_embeddings2,
                              ht2=text_embeddings2)
         alignment = loss.Alignment().to(device)
-        anisotropy = loss.Anisotropy().to(device)
+        Uniform = loss.Uniform().to(device)
         
-        total_loss = torch.sum(alignment+anisotropy)/batch_size
+        total_loss = torch.sum(alignment+Uniform)/batch_size
         total_loss.backward()
         optimizer.step()
 
         if step%10==0:
-            wandb.log({"Learning rate":lr,"total_loss": total_loss.item(), "alignment_loss": alignment_loss,"anisotropy_loss":anisotropy_loss})
-            print(step,"'s batch  ",'  &loss :',round(total_loss.item(),5),'alignment : ',round(alignment.mean().item(),4),' anisotropy :',round(anisotropy.mean().item(),4))
+            wandb.log({"Learning rate":lr,"total_loss": total_loss.item(), "alignment_loss": alignment_loss,"Uniform_loss":Uniform_loss})
+            print(step,"'s batch  ",'  &loss :',round(total_loss.item(),5),'alignment : ',round(alignment.mean().item(),4),' Uniform :',round(Uniform.mean().item(),4))
             print('lr :',lr)
 ```
 
@@ -302,30 +306,30 @@ def train(lora_model,device,train_dataloader,train_dataloader2):
 ##################
 Epoch :  0
 ##################
-0 's batch     &loss : 0.1842 alignment1,2 :  -0.088 -0.087  anisotropy : 0.359
+0 's batch     &loss : 0.1842 alignment1,2 :  -0.088 -0.087  Uniform : 0.359
 lr : 1.2352941176470589e-05
-10 's batch     &loss : 0.1743 alignment1,2 :  -0.088 -0.087  anisotropy : 0.349
+10 's batch     &loss : 0.1743 alignment1,2 :  -0.088 -0.087  Uniform : 0.349
 lr : 3.5882352941176474e-05
-20 's batch     &loss : 0.154 alignment1,2 :  -0.082 -0.082  anisotropy : 0.319
+20 's batch     &loss : 0.154 alignment1,2 :  -0.082 -0.082  Uniform : 0.319
 lr : 4.944045828160822e-05
 ####################
 validation!!
   7%|▋         | 1/15 [02:48<39:23, 168.80s/it]
-valid_loss : 0.11913358100822993 valid_alignment -0.07925071428571429 valid_anisotropy 0.2775714285714285
+valid_loss : 0.11913358100822993 valid_alignment -0.07925071428571429 valid_Uniform 0.2775714285714285
 
 
 									!! 중간 생략 !!
 
 
  93%|█████████▎| 14/15 [38:31<02:44, 164.59s/it]
-valid_loss : -1.340464472770691 valid_alignment 0.31172999999999995 valid_anisotropy -1.964
+valid_loss : -1.340464472770691 valid_alignment 0.31172999999999995 valid_Uniform -1.964
 ####################
 ##################
 Epoch :  14
 ##################
-0 's batch     &loss : -1.3409 alignment1,2 :  0.312 0.312  anisotropy : -1.965
+0 's batch     &loss : -1.3409 alignment1,2 :  0.312 0.312  Uniform : -1.965
 lr : 2.0051537954535784e-05
-10 's batch     &loss : -1.3403 alignment1,2 :  0.311 0.312  anisotropy : -1.964
+10 's batch     &loss : -1.3403 alignment1,2 :  0.311 0.312  Uniform : -1.964
 lr : 1.4550932728463223e-05
 ```
 
